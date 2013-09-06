@@ -1,4 +1,4 @@
-csp-project
+CSP-Project
 ===========
 
-Solution of two CSP problems using backtracking
+>Solution of two CSP problems using backtracking
