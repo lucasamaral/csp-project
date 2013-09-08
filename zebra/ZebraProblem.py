@@ -33,6 +33,7 @@ class Zebra(object):
                         'animal': ['zebra', 'cachorro', 'raposa', 'caramujos', 'cavalo'],
                         'drink' : ['agua', 'laranja', 'cha', 'cafe', 'leite']}
         self.solution = None
+        self.recursion_length = 0
 
         for x in xrange(5):
             self.variables.append(ZebraVar('nation'))
@@ -47,33 +48,56 @@ class Zebra(object):
         
         self.initial = ZebraState(self.variables)
 
-    def runZebra(self):
+    def run_zebra(self):
         self.explore(self.initial, self.domains)
 
     def explore(self, state, domain):
+        #print state.assigned
         if self.solution:
+            # print('ret1')
             return
 
         if len(state.unassigned) < 25:
             failure = self.check_constraints(state.assigned)
             if failure:
+                # print('ret2')
                 return
 
         if len(state.unassigned) > 0:
+            print('aqui')
             zebra_var = state.unassigned.pop()
-            for var_value in domain[zebra_var.name]:
-                zi = ZebraVar(zebra_var.name, var_value) #maybe this is not neccessary
-                next_domain = copy.deepcopy(domain)
-                next_domain[zebra_var.name].remove(var_value)
-                for idx in xrange(5):
-                    if state.assigned[idx][zi.name] == None:
-                        new_unass = list(state.unassigned)
-                        new_ass = copy.deepcopy(state.assigned)
-                        new_ass[idx][zi.name] = zi.value
-                        self.explore(ZebraState(new_unass, new_ass), next_domain)
+            
+            if domain[zebra_var.name]:
+                var_value = domain[zebra_var.name][0]
+            else:
+                # print('ret3')
+                return
+            zi = ZebraVar(zebra_var.name, var_value) #maybe this is not neccessary
+            # print('Dominio: ')
+            # print(domain)
+            # print('Assigned: ')
+            print(state.assigned)
+            # next_domain = copy.deepcopy(domain)
+            # next_domain[zebra_var.name].remove(var_value)
+            domain[zebra_var.name].remove(var_value)
+            for idx in xrange(5):
+                if state.assigned[idx][zi.name] is None:
+                    # new_unass = copy.deepcopy(state.unassigned)
+                    # new_ass = copy.deepcopy(state.assigned)
+                    # new_ass[idx][zi.name] = zi.value
+                    state.assigned[idx][zi.name] = zi.value
+                    # self.explore(ZebraState(new_unass, new_ass), next_domain)
+                    self.explore(ZebraState(state.unassigned, state.assigned), domain)
+                    state.assigned[idx][zi.name] = None
+                    if self.solution:
+                        # print('ret4')
+                        return
+            domain[zebra_var.name].append(var_value)
+            state.unassigned.append(zebra_var)
         else:
             if self.all_filled(state.assigned):
                 self.solution = state
+        # print('ret5')
 
     def all_filled(self, assigneds):
         for house in assigneds:
@@ -234,50 +258,50 @@ class Zebra(object):
             return False
 
     def check_constraints(self, assigneds):
-        failure = self.ingles_vermelha(assigneds)
-        if failure:
+        # better_dict = {}
+        # for index, house in enumerate(assigneds):
+        #     for v in house.values():
+        #         better_dict[v] = index
+
+        if self.noruegues_primeira(assigneds):
             return True
-        failure = self.espanhol_cachorro(assigneds)
-        if failure:
+        if self.espanhol_cachorro(assigneds):
+            return True
+        if self.kool_amarela(assigneds):
+            return True
+        if self.chester_lado_raposa(assigneds):
+            return True
+        if self.noruegues_lado_casa_azul(assigneds):
+            return True
+        if self.winston_caramujos(assigneds):
+            return True
+        if self.lucky_suco_laranja(assigneds):
+            return True
+        if self.ucraniano_cha(assigneds):
+            return True
+        if self.japones_fuma_parliament(assigneds):
+            return True
+        if self.kool_lado_cavalo(assigneds):
+            return True
+        # return False
+        if self.ingles_vermelha(assigneds):
+            return True
+        
+                
+                
+                
+                
+        
+        if self.cafe_casa_verde(assigneds):
             return True        
-        failure = self.noruegues_primeira(assigneds)
-        if failure:
+        if self.verde_a_direita_marfim(assigneds):
             return True        
-        failure = self.kool_amarela(assigneds)
-        if failure:
-            return True        
-        failure = self.chester_lado_raposa(assigneds)
-        if failure:
-            return True        
-        failure = self.noruegues_lado_casa_azul(assigneds)
-        if failure:
-            return True        
-        failure = self.winston_caramujos(assigneds)
-        if failure:
-            return True        
-        failure = self.lucky_suco_laranja(assigneds)
-        if failure:
-            return True        
-        failure = self.ucraniano_cha(assigneds)
-        if failure:
-            return True        
-        failure = self.japones_fuma_parliament(assigneds)
-        if failure:
-            return True        
-        failure = self.kool_lado_cavalo(assigneds)
-        if failure:
-            return True        
-        failure = self.cafe_casa_verde(assigneds)
-        if failure:
-            return True        
-        failure = self.verde_a_direita_marfim(assigneds)
-        if failure:
-            return True        
-        failure = self.leite_casa_meio(assigneds)
-        if failure:
+        if self.leite_casa_meio(assigneds):
             return True
         return False
 
 zebra = Zebra()
-zebra.runZebra()
+zebra.run_zebra()
+# for elt in zebra.solution.assigned:
+    # print elt
 print(zebra.solution.assigned)
