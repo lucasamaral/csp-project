@@ -1,4 +1,5 @@
 import sys
+import random
 
 class QueenState(object):
     """docstring for QueenState"""
@@ -7,7 +8,7 @@ class QueenState(object):
         self.assigned = assigned
 
     def __repr__(self):
-        return self.unassigned.__repr__() + self.assigned.__repr__()
+        return 'Unassigneds: ' + self.unassigned.__repr__() + '\nAssigneds: ' + self.assigned.__repr__()
 
 class QueenVar(object):
     """docstring for QueenVar"""
@@ -18,10 +19,10 @@ class QueenVar(object):
         self.value = val
 
     def __repr__(self):
-        repr_string = self.name
-        repr_string += 'D: ' + self.domain.__repr__()
-        repr_string += 'Pos: ' + str(self.position)
-        repr_string += 'Val: ' + str(self.value)
+        repr_string = '\n' + self.name
+        repr_string += '\nD: ' + self.domain.__repr__()
+        repr_string += '\nPos: ' + str(self.position)
+        repr_string += '\nVal: ' + str(self.value)
         return repr_string
 
 class NnQueens(object):
@@ -35,7 +36,46 @@ class NnQueens(object):
         
         self.initial = QueenState(self.queens)
 
-    def runNnQueens(self):
+    def minimum_conflicts(self, max_etapas):
+        variables = []
+        for x in xrange(1,self.number+1):
+            add = QueenVar(x, range(1, self.number+1), random.randint(1,self.number))
+            variables.append(add)
+
+        current_state = QueenState([], variables)
+        for x in xrange(1,max_etapas):
+            if not self.check_constraints(current_state.assigned):
+                self.solutions.append(current_state)
+                return
+            idx_var = random.randint(0,self.number-1)
+            var = current_state.assigned[idx_var]
+            value_on_min = -1
+            min_conflicts = sys.maxint
+            for value in var.domain:
+                conf = self.num_conflitos(var, value, current_state)
+                if conf < min_conflicts:
+                    min_conflicts = conf
+                    value_on_min = value
+
+            var.value = value_on_min
+        print 'Solucao nao encontrada'
+        return False
+
+    def num_conflitos(self, var, value, state):
+        count = 0
+        old_value = var.value
+        var.value = value
+        for var_queen in state.assigned:
+            for sec_queen in state.assigned[(state.assigned.index(var_queen)+1):]:
+                if var_queen.value == sec_queen.value:
+                    count += 1
+                if abs(var_queen.value-sec_queen.value) ==\
+                   abs(var_queen.position-sec_queen.position):
+                    count += 1
+        var.value = old_value
+        return count
+
+    def run_n_queens(self):
         self.explore(self.initial)
 
     def find_one_solution(self):
@@ -63,7 +103,8 @@ class NnQueens(object):
             for sec_queen in assigneds[(assigneds.index(var_queen)+1):]:
                 if var_queen.value == sec_queen.value:
                     return True
-                if abs(var_queen.value-sec_queen.value) == abs(var_queen.position-sec_queen.position):
+                if abs(var_queen.value-sec_queen.value) ==\
+                   abs(var_queen.position-sec_queen.position):
                     return True
         return False
 
@@ -107,6 +148,7 @@ class NnQueens(object):
         for i in xrange(1,self.number+1):
             sys.stdout.write('--')
         sys.stdout.write('\n')
+
     def print_all_solutions(self):
         for solution in self.solutions:
             self.print_queens(solution.assigned)
@@ -114,7 +156,8 @@ class NnQueens(object):
 # print 'Digite o numero de rainhas: '
 # n = input()
 Nqueens = NnQueens(20)
-# Nqueens.runNnQueens()
-Nqueens.find_one_solution()
+# Nqueens.run_n_queens()
+# Nqueens.find_one_solution()
+Nqueens.minimum_conflicts(1000)
 # print('Numero de solucoes: ' + str(len(Nqueens.solutions)))
 Nqueens.print_all_solutions()
