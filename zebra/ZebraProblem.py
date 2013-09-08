@@ -52,9 +52,7 @@ class Zebra(object):
         self.explore(self.initial, self.domains)
 
     def explore(self, state, domain):
-        # print state.assigned
         if self.solution:
-            # print('ret1')
             return
 
         if len(state.unassigned) < 25:
@@ -69,7 +67,7 @@ class Zebra(object):
                 var_value = domain[zebra_var.name][0]
             else:
                 return
-            zi = ZebraVar(zebra_var.name, var_value) #maybe this is not neccessary
+            zi = ZebraVar(zebra_var.name, var_value)
             domain[zebra_var.name].remove(var_value)
             for idx in xrange(5):
                 if state.assigned[idx][zi.name] is None:
