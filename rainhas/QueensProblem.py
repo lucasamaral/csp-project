@@ -38,6 +38,9 @@ class NnQueens(object):
     def runNnQueens(self):
         self.explore(self.initial)
 
+    def find_one_solution(self):
+        self.explore_one_solution(self.initial)
+
     def explore(self,state):
         if len(state.assigned) > 1:
             failure = self.check_constraints(state.assigned)
@@ -64,8 +67,8 @@ class NnQueens(object):
                     return True
         return False
 
-    def explore_one_solution(self):
-        if(len(self.solutions)>0):
+    def explore_one_solution(self, state):
+        if len(self.solutions) > 0:
             return
 
         if len(state.assigned) > 1:
@@ -80,7 +83,7 @@ class NnQueens(object):
                 new_unass = list(state.unassigned)
                 new_ass = list(state.assigned)
                 new_ass.append(q)
-                self.explore(QueenState(new_unass, new_ass))
+                self.explore_one_solution(QueenState(new_unass, new_ass))
         else:
             self.solutions.append(state)
 
@@ -108,9 +111,10 @@ class NnQueens(object):
         for solution in self.solutions:
             self.print_queens(solution.assigned)
         
-print 'Digite o numero de rainhas: '
-n = input()
-Nqueens = NnQueens(n)
-Nqueens.runNnQueens()
-print('Numero de solucoes: ' + str(len(Nqueens.solutions)))
+# print 'Digite o numero de rainhas: '
+# n = input()
+Nqueens = NnQueens(20)
+# Nqueens.runNnQueens()
+Nqueens.find_one_solution()
+# print('Numero de solucoes: ' + str(len(Nqueens.solutions)))
 Nqueens.print_all_solutions()
