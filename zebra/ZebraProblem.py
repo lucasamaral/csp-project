@@ -33,7 +33,6 @@ class Zebra(object):
                         'animal': ['zebra', 'cachorro', 'raposa', 'caramujos', 'cavalo'],
                         'drink' : ['agua', 'laranja', 'cha', 'cafe', 'leite']}
         self.solution = None
-        self.recursion_length = 0
 
         for x in xrange(5):
             self.variables.append(ZebraVar('nation'))
@@ -199,7 +198,6 @@ class Zebra(object):
             return True
         return False
         
-
 zebra = Zebra()
 zebra.run_zebra()
 for elt in zebra.solution.assigned:
