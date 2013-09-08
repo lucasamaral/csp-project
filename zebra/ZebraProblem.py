@@ -86,158 +86,81 @@ class Zebra(object):
 
     def all_filled(self, assigneds):
         for house in assigneds:
-            if house['nation'] == None or house['cigar'] == None or house['animal'] == None or \
-                house['color'] == None or house['drink'] == None:
+            if None in house.values():
                 return False
         return True
 
     """Every constraint checking function returns the answer to: Was there a failure?"""
 
-    def ingles_vermelha(self, assigneds):
-        for house in assigneds:
-            if house['nation'] and house['nation'] == 'ingles' and \
-                house['color'] and house['color'] != 'vermelha':
-                return True
-            if house['color'] and house['color'] == 'vermelha' and \
-                house['nation'] and house['nation'] != 'ingles':
-                return True
+    def ingles_vermelha(self, better_dict):
+        if 'ingles' in better_dict and 'vermelha' in better_dict and better_dict['ingles'] != better_dict['vermelha']:
+            return True  
         return False
 
 
-    def espanhol_cachorro(self, assigneds):
-        for house in assigneds:
-            if house['nation'] and house['nation'] == 'espanhol' and \
-                house['animal'] and house['animal'] != 'cachorro':
-                return True
-            if house['nation'] and house['nation'] != 'espanhol' and \
-                house['animal'] and house['animal'] == 'cachorro':
-                return True
+    def espanhol_cachorro(self, better_dict):
+        if 'espanhol' in better_dict and 'cachorro' in better_dict and better_dict['espanhol'] != better_dict['cachorro']:
+            return True  
         return False
 
-    def noruegues_primeira(self, assigneds):
-        for house in assigneds:
-            if house['nation'] and house['nation'] == 'noruegues' and assigneds.index(house) != 0:
-                return True
-            if house['nation'] and house['nation'] != 'noruegues' and assigneds.index(house) == 0:
-                return True
+    def noruegues_primeira(self, better_dict):
+        if 'noruegues' in better_dict and better_dict['noruegues'] != 0:
+            return True  
         return False
 
-    def kool_amarela(self, assigneds):
-        for house in assigneds:
-            if house['cigar'] and house['cigar'] == 'kool' and \
-                house['color'] and house['color'] != 'amarela':
-                return True
-            if house['cigar'] and house['cigar'] != 'kool' and \
-                house['color'] and house['color'] == 'amarela':
-                return True
+    def kool_amarela(self, better_dict):
+        if 'kool' in better_dict and 'amarela' in better_dict and better_dict['kool'] != better_dict['amarela']:
+            return True  
         return False
 
-    def chester_lado_raposa(self, assigneds):
-        for idx in xrange(5):
-            if assigneds[idx]['cigar'] and assigneds[idx]['cigar'] == 'chester':
-                if idx > 0 and idx < 4:
-                    if assigneds[idx-1]['animal'] and assigneds[idx-1]['animal'] != 'raposa' and \
-                        assigneds[idx+1]['animal'] and assigneds[idx+1]['animal'] != 'raposa':
-                        return True
-                elif idx == 0:
-                    if assigneds[idx+1]['animal'] and assigneds[idx+1]['animal'] != 'raposa':
-                        return True
-                elif idx == 4:
-                    if assigneds[idx-1]['animal'] and assigneds[idx-1]['animal'] != 'raposa':
-                        return True
+    def chester_lado_raposa(self, better_dict):
+        if 'chester' in better_dict and 'raposa' in better_dict and abs(better_dict['chester']-better_dict['raposa'])!=1:
+            return True  
         return False
 
-    def noruegues_lado_casa_azul(self, assigneds):
-        for idx in xrange(5):
-            if assigneds[idx]['nation'] and assigneds[idx]['nation'] == 'noruegues':
-                if idx > 0 and idx < 4:
-                    if assigneds[idx-1]['color'] and assigneds[idx-1]['color'] != 'azul' and \
-                        assigneds[idx+1]['color'] and assigneds[idx+1]['color'] != 'azul':
-                        return True
-                elif idx == 0:
-                    if assigneds[idx+1]['color'] and assigneds[idx+1]['color'] != 'azul':
-                        return True
-                elif idx == 4:
-                    if assigneds[idx-1]['color'] and assigneds[idx-1]['color'] != 'azul':
-                        return True
+    def noruegues_lado_casa_azul(self, better_dict):
+        if 'noruegues' in better_dict and 'azul' in better_dict and abs(better_dict['noruegues']-better_dict['azul'])!=1:
+            return True  
         return False
 
-    def winston_caramujos(self, assigneds):
-        for house in assigneds:
-            if house['cigar'] and house['cigar'] == 'winston' and \
-                house['animal'] and house['animal'] != 'caramujos':
-                return True
-            if house['cigar'] and house['cigar'] != 'winston' and \
-                house['animal'] and house['animal'] == 'caramujos':
-                return True
+    def winston_caramujos(self, better_dict):
+        if 'winston' in better_dict and 'caramujos' in better_dict and better_dict['winston'] != better_dict['caramujos']:
+            return True  
         return False
 
-    def lucky_suco_laranja(self, assigneds):
-        for house in assigneds:
-            if house['cigar'] and house['cigar'] == 'lucky' and \
-                house['drink'] and house['drink'] != 'laranja':
-                return True
-            if house['cigar'] and house['cigar'] != 'lucky' and \
-                house['drink'] and house['drink'] == 'laranja':
-                return True
+    def lucky_suco_laranja(self, better_dict):
+        if 'lucky' in better_dict and 'laranja' in better_dict and better_dict['lucky'] != better_dict['laranja']:
+            return True  
         return False
 
-    def ucraniano_cha(self, assigneds):
-        for house in assigneds:
-            if house['nation'] and house['nation'] == 'ucraniano' and \
-                house['drink'] and house['drink'] != 'cha':
-                return True
-            if house['nation'] and house['nation'] != 'ucraniano' and \
-                house['drink'] and house['drink'] == 'cha':
-                return True
+    def ucraniano_cha(self, better_dict):
+        if 'ucraniano' in better_dict and 'cha' in better_dict and better_dict['ucraniano'] != better_dict['cha']:
+            return True  
         return False
 
-    def japones_fuma_parliament(self, assigneds):
-        for house in assigneds:
-            if house['nation'] and house['nation'] == 'japones' and \
-                house['cigar'] and house['cigar'] != 'parliament':
-                return True
-            if house['nation'] and house['nation'] != 'japones' and \
-                house['cigar'] and house['cigar'] == 'parliament':
-                return True
+    def japones_fuma_parliament(self, better_dict):
+        if 'japones' in better_dict and 'parliament' in better_dict and better_dict['japones'] != better_dict['parliament']:
+            return True  
         return False
 
-    def kool_lado_cavalo(self, assigneds):
-        for idx in xrange(5):
-            if assigneds[idx]['cigar'] and assigneds[idx]['cigar'] == 'kool':
-                if idx > 0 and idx < 4:
-                    if assigneds[idx-1]['animal'] and assigneds[idx-1]['animal'] != 'cavalo' and \
-                        assigneds[idx+1]['animal'] and assigneds[idx+1]['animal'] != 'cavalo':
-                        return True
-                elif idx == 0:
-                    if assigneds[idx+1]['animal'] and assigneds[idx+1]['animal'] != 'cavalo':
-                        return True
-                elif idx == 4:
-                    if assigneds[idx-1]['animal'] and assigneds[idx-1]['animal'] != 'cavalo':
-                        return True
+    def kool_lado_cavalo(self, better_dict):
+        if 'kool' in better_dict and 'cavalo' in better_dict and abs(better_dict['kool']-better_dict['cavalo'])!=1:
+            return True  
         return False
 
-    def cafe_casa_verde(self, assigneds):
-        for house in assigneds:
-            if house['drink'] and house['drink'] == 'cafe' and \
-                house['color'] and house['color'] != 'verde':
-                return True
-            if house['drink'] and house['drink'] != 'cafe' and \
-                house['color'] and house['color'] == 'verde':
-                return True
+
+    def cafe_casa_verde(self, better_dict):
+        if 'cafe' in better_dict and 'verde' in better_dict and better_dict['cafe'] != better_dict['verde']:
+            return True  
         return False
 
-    def verde_a_direita_marfim(self, assigneds):
-        for idx in xrange(5):
-            if assigneds[idx]['color'] and assigneds[idx]['color'] == 'marfim':
-                if idx == 4:
-                    return True
-                if assigneds[idx+1]['color'] and assigneds[idx+1]['color'] != 'verde':
-                    return True
+    def verde_a_direita_marfim(self, better_dict):
+        if 'verde' in better_dict and 'marfim' in better_dict and better_dict['verde']-better_dict['marfim']!=1:
+            return True  
         return False
 
-    def leite_casa_meio(self, assigneds):
-        if assigneds[2]['drink'] and assigneds[2]['drink'] != 'leite':
+    def leite_casa_meio(self, better_dict):
+        if 'leite' in better_dict and better_dict['leite'] != 2:
             return True
         else:
             return False
@@ -248,34 +171,33 @@ class Zebra(object):
             for v in house.values():
                 better_dict[v] = index
 
-        if self.noruegues_primeira(assigneds, better_dict):
+        if self.noruegues_primeira(better_dict):
             return True
-        if self.espanhol_cachorro(assigneds, better_dict):
+        if self.espanhol_cachorro(better_dict):
             return True
-        if self.kool_amarela(assigneds, better_dict):
+        if self.kool_amarela(better_dict):
             return True
-        if self.chester_lado_raposa(assigneds, better_dict):
+        if self.chester_lado_raposa(better_dict):
             return True
-        if self.noruegues_lado_casa_azul(assigneds, better_dict):
+        if self.noruegues_lado_casa_azul(better_dict):
             return True
-        if self.winston_caramujos(assigneds, better_dict):
+        if self.winston_caramujos(better_dict):
             return True
-        if self.lucky_suco_laranja(assigneds, better_dict):
+        if self.lucky_suco_laranja(better_dict):
             return True
-        if self.ucraniano_cha(assigneds, better_dict):
+        if self.ucraniano_cha(better_dict):
             return True
-        if self.japones_fuma_parliament(assigneds, better_dict):
+        if self.japones_fuma_parliament(better_dict):
             return True
-        if self.kool_lado_cavalo(assigneds, better_dict):
+        if self.kool_lado_cavalo(better_dict):
             return True
-        if self.cafe_casa_verde(assigneds, better_dict):
+        if self.cafe_casa_verde(better_dict):
             return True        
-        if self.verde_a_direita_marfim(assigneds, better_dict):
+        if self.verde_a_direita_marfim(better_dict):
             return True        
-        if self.leite_casa_meio(assigneds, better_dict):
+        if self.leite_casa_meio(better_dict):
             return True
-        # return False
-        if self.ingles_vermelha(assigneds, better_dict):
+        if self.ingles_vermelha(better_dict):
             return True
         return False
         
@@ -284,4 +206,3 @@ zebra = Zebra()
 zebra.run_zebra()
 for elt in zebra.solution.assigned:
     print elt
-# print(zebra.solution.assigned)
